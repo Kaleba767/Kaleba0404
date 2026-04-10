@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drive Accounts</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+    }
+
+    .accounts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.03);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .card:active {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 800px) {
+      .accounts {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Select Drive Account</h1>
+
+    <div class="accounts">
+
+      <!-- ACCOUNT 1 -->
+      <div class="card" onclick="openDrive('https://drive.google.com/drive/folders/14o2FuJxYcBdvJ-_Yas69Unj1q9nXFq-h?usp=drive_link')">
+        <h2>ESKA</h2>
+        <p>A luh theih e</p>
+      </div>
+
+      <!-- ACCOUNT 2 -->
+      <div class="card" onclick="openDrive('https://drive.google.com/drive/folders/1hrdPa2TjjoWxNUJxLcHyx0Srck66VeN6?usp=drive_link')">
+        <h2>FAMILY.1</h2>
+        <p>A luh theih e</p>
+      </div>
+
+      <!-- ACCOUNT 3 -->
+      <div class="card" onclick="openDrive('https://drive.google.com/drive/folders/1X88j_ELBkwhrph2ohsH7WV7TKfQeJhDv?usp=drive_link')">
+        <h2>FAMILY.2</h2>
+        <p>A luh theih e</p>
+      </div>
+
+      <!-- ACCOUNT 4 (PASSWORD PROTECTED) -->
+      <div class="card" onclick="openProtectedDrive('https://drive.google.com/drive/folders/1vsfr2z4Mxpw5QN98igjClD5cUaGgoe3X?usp=drive_link')">
+        <h2>OTHERS</h2>
+        <p>🔒 Password angai</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Ripple animation for click/tap
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        let ripple = document.createElement('span');
+        ripple.style.position = 'absolute';
+        ripple.style.borderRadius = '50%';
+        ripple.style.background = 'rgba(255,255,255,0.4)';
+        ripple.style.transform = 'scale(0)';
+        ripple.style.animation = 'ripple 0.6s linear';
+        ripple.style.left = e.offsetX + 'px';
+        ripple.style.top = e.offsetY + 'px';
+        ripple.style.width = ripple.style.height = '100px';
+        ripple.style.marginLeft = '-50px';
+        ripple.style.marginTop = '-50px';
+
+        this.appendChild(ripple);
+
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+
+    const PASSWORD = "KLB04";
+
+    function openDrive(link) {
+      window.open(link, '_blank');
+    }
+
+    function openProtectedDrive(link) {
+      let input = prompt("Password chhu rawh le:");
+
+      if (input === PASSWORD) {
+        window.open(link, '_blank');
+      } else {
+        alert("password a dik lo!");
+      }
+    }
+  </script>
+</body>
+</html>
