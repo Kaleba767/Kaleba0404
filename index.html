@@ -13,60 +13,57 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
 
     .container {
       text-align: center;
+      max-width: 1000px;
+      padding: 20px;
     }
 
     h1 {
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       font-size: 2.5rem;
       letter-spacing: 1px;
     }
 
     .accounts {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 20px;
     }
 
     .card {
       position: relative;
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 30px;
-      border-radius: 15px;
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.15); /* semi-transparent */
+      padding: 25px;
+      border-radius: 20px;
+      backdrop-filter: blur(12px); /* frosted glass effect */
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3); /* soft shadow */
       cursor: pointer;
       transition: transform 0.3s ease, background 0.3s ease;
     }
 
     .card:hover {
-      transform: translateY(-10px) scale(1.03);
-      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-8px) scale(1.02);
+      background: rgba(255, 255, 255, 0.25);
     }
 
     .card:active {
       transform: scale(0.95);
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.3);
     }
 
     .card h2 {
-      margin: 0;
-      font-size: 1.5rem;
+      margin: 0 0 10px;
+      font-size: 1.4rem;
     }
 
     .card p {
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-
-    @media (max-width: 800px) {
-      .accounts {
-        grid-template-columns: 1fr;
-      }
+      font-size: 0.95rem;
+      opacity: 0.85;
     }
 
     @keyframes ripple {
@@ -80,9 +77,7 @@
 <body>
   <div class="container">
     <h1>Select Drive Account</h1>
-
     <div class="accounts">
-
       <!-- ACCOUNT 1 -->
       <div class="card" onclick="openDrive('https://drive.google.com/drive/folders/14o2FuJxYcBdvJ-_Yas69Unj1q9nXFq-h?usp=drive_link')">
         <h2>ESKA</h2>
@@ -106,12 +101,11 @@
         <h2>OTHERS</h2>
         <p>🔒 Password angai</p>
       </div>
-
     </div>
   </div>
 
   <script>
-    // Ripple animation for click/tap
+    // Ripple animation
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('click', function(e) {
         let ripple = document.createElement('span');
@@ -125,12 +119,8 @@
         ripple.style.width = ripple.style.height = '100px';
         ripple.style.marginLeft = '-50px';
         ripple.style.marginTop = '-50px';
-
         this.appendChild(ripple);
-
-        setTimeout(() => {
-          ripple.remove();
-        }, 600);
+        setTimeout(() => ripple.remove(), 600);
       });
     });
 
@@ -142,11 +132,10 @@
 
     function openProtectedDrive(link) {
       let input = prompt("Password chhu rawh le:");
-
       if (input === PASSWORD) {
         window.open(link, '_blank');
       } else {
-        alert("password a dik lo!");
+        alert("Password a dik lo!");
       }
     }
   </script>
