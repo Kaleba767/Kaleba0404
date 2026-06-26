@@ -64,6 +64,13 @@
       touch-action: none;
     }
 
+    .card.active {
+      box-shadow:
+        0 32px 64px rgba(0,0,0,0.5),
+        0 0 40px rgba(255,255,255,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
     .card:active { cursor: grabbing; }
 
     .card .badge {
@@ -109,6 +116,7 @@
       gap: 8px;
       margin-top: 36px;
     }
+
     .dot {
       width: 7px;
       height: 7px;
@@ -116,6 +124,7 @@
       background: rgba(255,255,255,0.28);
       transition: background 0.3s, transform 0.3s;
     }
+
     .dot.active {
       background: white;
       transform: scale(1.35);
@@ -128,171 +137,199 @@
       letter-spacing: 2px;
       text-transform: uppercase;
     }
-  </style>
+
+    @media (max-width: 600px) {
+      .card {
+        width: 220px;
+        height: 330px;
+      }
+    }
+  
+.nav-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:52px;height:52px;border:none;border-radius:50%;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.22);
+  color:#fff;font-size:28px;cursor:pointer;
+  transition:.25s;z-index:999;
+}
+.nav-btn:hover{background:rgba(255,255,255,.22);transform:translateY(-50%) scale(1.08);}
+.prev{left:35px;}
+.next{right:35px;}
+@media(max-width:600px){
+.nav-btn{width:44px;height:44px;font-size:22px;}
+.prev{left:12px;}
+.next{right:12px;}
+}
+</style>
 </head>
 <body>
 
-  <h1>Select Drive Account</h1>
+<h1>Select Drive Account</h1>
 
-  <div class="carousel-wrapper" id="carousel">
+<div class="carousel-wrapper" id="carousel">
 
-    <div class="card" data-index="0"
-         data-link="https://drive.google.com/drive/folders/14o2FuJxYcBdvJ-_Yas69Unj1q9nXFq-h?usp=drive_link"
-         data-protected="false">
-      <div class="icon">☁️</div>
-      <h2>ESKA</h2>
-      <p>A luh theih e</p>
-    </div>
-
-    <div class="card" data-index="1"
-         data-link="https://drive.google.com/drive/folders/1hrdPa2TjjoWxNUJxLcHyx0Srck66VeN6?usp=drive_link"
-         data-protected="false">
-      <div class="icon">👨‍👩‍👧</div>
-      <h2>FAMILY.1</h2>
-      <p>A luh theih e</p>
-    </div>
-
-    <div class="card" data-index="2"
-         data-link="https://drive.google.com/drive/folders/1X88j_ELBkwhrph2ohsH7WV7TKfQeJhDv?usp=drive_link"
-         data-protected="false">
-      <div class="icon">🏠</div>
-      <h2>FAMILY.2</h2>
-      <p>A luh theih e</p>
-    </div>
-
-    <div class="card" data-index="3"
-         data-link="https://drive.google.com/drive/folders/1vsfr2z4Mxpw5QN98igjClD5cUaGgoe3X?usp=drive_link"
-         data-protected="true">
-      <div class="icon">🔐</div>
-      <span class="badge">🔒</span>
-      <h2>OTHERS</h2>
-      <p>Password angai</p>
-    </div>
-
-    <div class="card" data-index="4"
-         data-link="#"
-         data-protected="false">
-      <div class="icon">📱</div>
-      <h2>Sawmsanga</h2>
-      <p>Phone ami</p>
-    </div>
-
+  <div class="card" data-index="0">
+    <div class="icon">☁️</div>
+    <h2>ESKA</h2>
+    <p>A luh theih e</p>
   </div>
 
-  <div class="dots" id="dots"></div>
-  <p class="hint">Swipe or use arrow keys · Tap to open</p>
+  <div class="card" data-index="1">
+    <div class="icon">👨‍👩‍👧</div>
+    <h2>FAMILY.1</h2>
+    <p>A luh theih e</p>
+  </div>
 
-  <script>
-    const cards = Array.from(document.querySelectorAll('.card'));
-    const dotsEl = document.getElementById('dots');
-    const total = cards.length;
-    const PASSWORD = "KLB04";
+  <div class="card" data-index="2">
+    <div class="icon">🏠</div>
+    <h2>FAMILY.2</h2>
+    <p>A luh theih e</p>
+  </div>
 
-    let current = 0;
-    let startX = 0;
-    let isDragging = false;
-    let dragDelta = 0;
+  <div class="card" data-index="3">
+    <div class="icon">🔐</div>
+    <span class="badge">🔒</span>
+    <h2>OTHERS</h2>
+    <p>Password angai</p>
+  </div>
 
-    // Build dots
-    cards.forEach((_, i) => {
-      const d = document.createElement('div');
-      d.className = 'dot' + (i === 0 ? ' active' : '');
-      dotsEl.appendChild(d);
+  <div class="card" data-index="4">
+    <div class="icon">📱</div>
+    <h2>SSA Phone ami</h2>
+    <p>A luh theih e</p>
+  </div>
+
+
+  <button class="nav-btn prev">&#10094;</button>
+  <button class="nav-btn next">&#10095;</button>
+
+</div>
+
+<div class="dots" id="dots"></div>
+<p class="hint">Swipe or use arrow keys · Tap to open</p>
+
+<script>
+  const cards = Array.from(document.querySelectorAll('.card'));
+  const dotsEl = document.getElementById('dots');
+  const total = cards.length;
+
+  let current = 0;
+  let startX = 0;
+  let isDragging = false;
+  let dragDelta = 0;
+
+  cards.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    dotsEl.appendChild(d);
+  });
+
+  function getX(i) {
+    const spacing = window.innerWidth < 600 ? 145 : 195;
+    return (i - current) * spacing;
+  }
+
+  function getAngle(i) {
+    return Math.max(-42, Math.min(42, (i - current) * 16));
+  }
+
+  function getScale(i) {
+    const d = Math.abs(i - current);
+    return d === 0 ? 1 : d === 1 ? 0.82 : d === 2 ? 0.66 : 0.52;
+  }
+
+  function getZ(i) {
+    return 100 - Math.abs(i - current) * 20;
+  }
+
+  function getOpacity(i) {
+    const d = Math.abs(i - current);
+    return d === 0 ? 1 : d === 1 ? 0.72 : d === 2 ? 0.48 : 0.22;
+  }
+
+  function applyLayout(animated = true) {
+    cards.forEach((card, i) => {
+      card.style.transition = animated
+        ? 'transform 0.42s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.42s ease'
+        : 'none';
+
+      card.style.zIndex = getZ(i);
+      card.style.opacity = getOpacity(i);
+      card.style.transform = `translateX(${getX(i)}px) rotate(${getAngle(i)}deg) scale(${getScale(i)})`;
+      card.classList.toggle('active', i === current);
     });
 
-    function getX(i) { return (i - current) * 195; }
-    function getAngle(i) { return Math.max(-42, Math.min(42, (i - current) * 16)); }
-    function getScale(i) {
-      const d = Math.abs(i - current);
-      return d === 0 ? 1 : d === 1 ? 0.82 : d === 2 ? 0.66 : 0.52;
-    }
-    function getZ(i) { return 100 - Math.abs(i - current) * 20; }
-    function getOpacity(i) {
-      const d = Math.abs(i - current);
-      return d === 0 ? 1 : d === 1 ? 0.72 : d === 2 ? 0.48 : 0.22;
-    }
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
 
-    function applyLayout(animated = true) {
-      cards.forEach((card, i) => {
-        card.style.transition = animated
-          ? 'transform 0.42s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.42s ease'
-          : 'none';
-        card.style.zIndex = getZ(i);
-        card.style.opacity = getOpacity(i);
-        card.style.transform = `translateX(${getX(i)}px) rotate(${getAngle(i)}deg) scale(${getScale(i)})`;
-      });
-      document.querySelectorAll('.dot').forEach((d, i) => {
-        d.classList.toggle('active', i === current);
-      });
-    }
+  function goTo(index) {
+    if (index < 0) current = total - 1;
+    else if (index >= total) current = 0;
+    else current = index;
 
-    function goTo(index) {
-      current = Math.max(0, Math.min(total - 1, index));
+    applyLayout(true);
+  }
+
+  applyLayout(false);
+
+  function onStart(clientX) {
+    isDragging = true;
+    startX = clientX;
+    dragDelta = 0;
+  }
+
+  function onMove(clientX) {
+    if (!isDragging) return;
+
+    dragDelta = clientX - startX;
+
+    cards.forEach((card, i) => {
+      card.style.transition = 'none';
+      card.style.transform = `translateX(${getX(i) + dragDelta}px) rotate(${getAngle(i)}deg) scale(${getScale(i)})`;
+    });
+  }
+
+  function onEnd(clientX) {
+    if (!isDragging) return;
+
+    isDragging = false;
+    dragDelta = clientX - startX;
+
+    if (dragDelta < -50) {
+      goTo(current + 1);
+    } else if (dragDelta > 50) {
+      goTo(current - 1);
+    } else {
       applyLayout(true);
     }
+  }
 
-    applyLayout(false);
+  document.addEventListener('mousedown', e => {
+    if (e.target.closest('.card')) onStart(e.clientX);
+  });
 
-    // ── Drag ──
-    function onStart(clientX) { isDragging = true; startX = clientX; dragDelta = 0; }
+  document.addEventListener('mousemove', e => onMove(e.clientX));
+  document.addEventListener('mouseup', e => onEnd(e.clientX));
 
-    function onMove(clientX) {
-      if (!isDragging) return;
-      dragDelta = clientX - startX;
-      cards.forEach((card, i) => {
-        card.style.transition = 'none';
-        card.style.transform = `translateX(${getX(i) + dragDelta}px) rotate(${getAngle(i)}deg) scale(${getScale(i)})`;
-      });
-    }
+  document.addEventListener('touchstart', e => {
+    if (e.target.closest('.card')) onStart(e.touches[0].clientX);
+  }, { passive: true });
 
-    function onEnd(clientX) {
-      if (!isDragging) return;
-      isDragging = false;
-      dragDelta = clientX - startX;
-      if (Math.abs(dragDelta) < 6) {
-        handleTap(cards[current]);
-      } else if (dragDelta < -50 && current < total - 1) {
-        goTo(current + 1);
-      } else if (dragDelta > 50 && current > 0) {
-        goTo(current - 1);
-      } else {
-        applyLayout(true);
-      }
-    }
+  document.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
 
-    // Mouse events
-    document.addEventListener('mousedown', e => { if (e.target.closest('.card')) onStart(e.clientX); });
-    document.addEventListener('mousemove', e => onMove(e.clientX));
-    document.addEventListener('mouseup', e => onEnd(e.clientX));
+  document.addEventListener('touchend', e => onEnd(e.changedTouches[0].clientX));
 
-    // Touch events
-    document.addEventListener('touchstart', e => { if (e.target.closest('.card')) onStart(e.touches[0].clientX); }, { passive: true });
-    document.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
-    document.addEventListener('touchend', e => onEnd(e.changedTouches[0].clientX));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') goTo(current + 1);
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+  });
 
-    // Keyboard
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight') goTo(current + 1);
-      if (e.key === 'ArrowLeft') goTo(current - 1);
-      if (e.key === 'Enter') handleTap(cards[current]);
-    });
-
-    // Click non-center card to navigate to it
-    cards.forEach((card, i) => {
-      card.addEventListener('click', () => { if (i !== current) goTo(i); });
-    });
-
-    function handleTap(card) {
-      const link = card.dataset.link;
-      if (card.dataset.protected === 'true') {
-        const input = prompt("Password chhu rawh le:");
-        if (input === PASSWORD) window.open(link, '_blank');
-        else alert("Password a dik lo!");
-      } else {
-        if (link && link !== '#') window.open(link, '_blank');
-        else alert("Link a awm lo zel — chhuah ang!");
-      }
-    }
-  </script>
+  document.querySelector('.prev').addEventListener('click', () => goTo(current - 1));
+  document.querySelector('.next').addEventListener('click', () => goTo(current + 1));
+</script>
 </body>
 </html>
