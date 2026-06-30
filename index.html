@@ -31,6 +31,110 @@
       text-align: center;
     }
 
+    /* ---------- Lock screen ---------- */
+    .lock-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(160deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      z-index: 2000;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    .lock-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .lock-icon {
+      font-size: 2.4rem;
+      opacity: 0.85;
+    }
+    .lock-title {
+      font-size: 1rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.7;
+      font-weight: 300;
+    }
+    .lock-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .lock-input {
+      width: 240px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: white;
+      font-size: 1.1rem;
+      text-align: center;
+      letter-spacing: 4px;
+      outline: none;
+    }
+    .lock-input::placeholder {
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+    .lock-input:focus {
+      border-color: rgba(255,255,255,0.5);
+    }
+    .lock-btn {
+      padding: 12px 32px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.15);
+      color: white;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+    .lock-btn:hover {
+      background: rgba(255,255,255,0.28);
+    }
+    .lock-error {
+      font-size: 0.78rem;
+      color: #ff8a8a;
+      opacity: 0;
+      transition: opacity 0.25s;
+      letter-spacing: 1px;
+    }
+    .lock-error.show {
+      opacity: 1;
+    }
+    .lock-shake {
+      animation: shake 0.3s;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    /* ---------- Main content (hidden until unlocked) ---------- */
+    .site-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .site-content.revealed {
+      opacity: 1;
+    }
+
     .carousel-wrapper {
       position: relative;
       width: 100vw;
@@ -69,9 +173,11 @@
         0 32px 64px rgba(0,0,0,0.5),
         0 0 40px rgba(255,255,255,0.18),
         inset 0 1px 0 rgba(255,255,255,0.35);
+      cursor: pointer;
     }
 
     .card:active { cursor: grabbing; }
+    .card.active:active { cursor: grabbing; }
 
     .card .badge {
       position: absolute;
@@ -105,11 +211,10 @@
       font-weight: 300;
     }
 
-    .card:nth-child(1) .icon { background: linear-gradient(135deg,#4facfe,#00f2fe); }
-    .card:nth-child(2) .icon { background: linear-gradient(135deg,#43e97b,#38f9d7); }
-    .card:nth-child(3) .icon { background: linear-gradient(135deg,#f093fb,#f5576c); }
-    .card:nth-child(4) .icon { background: linear-gradient(135deg,#fda085,#f6d365); }
-    .card:nth-child(5) .icon { background: linear-gradient(135deg,#a18cd1,#fbc2eb); }
+    .card[data-index="0"] .icon { background: linear-gradient(135deg,#4facfe,#00f2fe); }
+    .card[data-index="1"] .icon { background: linear-gradient(135deg,#43e97b,#38f9d7); }
+    .card[data-index="2"] .icon { background: linear-gradient(135deg,#f093fb,#f5576c); }
+    .card[data-index="3"] .icon { background: linear-gradient(135deg,#fda085,#f6d365); }
 
     .dots {
       display: flex;
@@ -144,73 +249,178 @@
         height: 330px;
       }
     }
-  
-.nav-btn{
-  position:absolute;top:50%;transform:translateY(-50%);
-  width:52px;height:52px;border:none;border-radius:50%;
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.22);
-  color:#fff;font-size:28px;cursor:pointer;
-  transition:.25s;z-index:999;
-}
-.nav-btn:hover{background:rgba(255,255,255,.22);transform:translateY(-50%) scale(1.08);}
-.prev{left:35px;}
-.next{right:35px;}
-@media(max-width:600px){
-.nav-btn{width:44px;height:44px;font-size:22px;}
-.prev{left:12px;}
-.next{right:12px;}
-}
-</style>
+
+    .nav-btn{
+      position:absolute;top:50%;transform:translateY(-50%);
+      width:52px;height:52px;border:none;border-radius:50%;
+      background:rgba(255,255,255,.12);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,.22);
+      color:#fff;font-size:28px;cursor:pointer;
+      transition:.25s;z-index:999;
+    }
+    .nav-btn:hover{background:rgba(255,255,255,.22);transform:translateY(-50%) scale(1.08);}
+    .prev{left:35px;}
+    .next{right:35px;}
+    @media(max-width:600px){
+      .nav-btn{width:44px;height:44px;font-size:22px;}
+      .prev{left:12px;}
+      .next{right:12px;}
+    }
+
+    /* ---------- OTHERS password modal ---------- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1500;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-box {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 22px;
+      padding: 32px 28px;
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+    }
+    .modal-box .icon { font-size: 1.8rem; }
+    .modal-box h3 {
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 300;
+      opacity: 0.8;
+    }
+    .modal-close {
+      margin-top: 4px;
+      font-size: 0.72rem;
+      opacity: 0.45;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: white;
+    }
+    .modal-close:hover { opacity: 0.8; }
+  </style>
 </head>
 <body>
 
-<h1>Select Drive Account</h1>
+<!-- ===== SITE-WIDE LOCK SCREEN ===== -->
+<div class="lock-screen" id="lockScreen">
+  <div class="lock-icon">🔒</div>
+  <div class="lock-title">Enter Password</div>
+  <div class="lock-form">
+    <input type="password" class="lock-input" id="siteLockInput" placeholder="• • • •" autocomplete="off">
+    <button class="lock-btn" id="siteLockBtn">Unlock</button>
+    <div class="lock-error" id="siteLockError">Incorrect password</div>
+  </div>
+</div>
 
-<div class="carousel-wrapper" id="carousel">
+<!-- ===== MAIN SITE CONTENT ===== -->
+<div class="site-content" id="siteContent">
 
-  <div class="card" data-index="0">
-    <div class="icon">☁️</div>
-    <h2>ESKA</h2>
-    <p>A luh theih e</p>
+  <h1>Select Drive Account</h1>
+
+  <div class="carousel-wrapper" id="carousel">
+
+    <div class="card" data-index="0" data-link="https://drive.google.com/drive/folders/14o2FuJxYcBdvJ-_Yas69Unj1q9nXFq-h?usp=drive_link">
+      <div class="icon">☁️</div>
+      <h2>ESKA</h2>
+      <p>A luh theih e</p>
+    </div>
+
+    <div class="card" data-index="1" data-link="https://drive.google.com/drive/folders/1hrdPa2TjjoWxNUJxLcHyx0Srck66VeN6?usp=drive_link">
+      <div class="icon">👨‍👩‍👧</div>
+      <h2>FAMILY.1</h2>
+      <p>A luh theih e</p>
+    </div>
+
+    <div class="card" data-index="2" data-link="https://drive.google.com/drive/folders/1X88j_ELBkwhrph2ohsH7WV7TKfQeJhDv?usp=drive_link">
+      <div class="icon">🏠</div>
+      <h2>FAMILY.2</h2>
+      <p>A luh theih e</p>
+    </div>
+
+    <div class="card" data-index="3" data-locked="true" data-link="https://drive.google.com/drive/folders/1vsfr2z4Mxpw5QN98igjClD5cUaGgoe3X?usp=drive_link">
+      <div class="icon">🔐</div>
+      <span class="badge">🔒</span>
+      <h2>OTHERS</h2>
+      <p>Password angai</p>
+    </div>
+
+    <button class="nav-btn prev">&#10094;</button>
+    <button class="nav-btn next">&#10095;</button>
+
   </div>
 
-  <div class="card" data-index="1">
-    <div class="icon">👨‍👩‍👧</div>
-    <h2>FAMILY.1</h2>
-    <p>A luh theih e</p>
-  </div>
-
-  <div class="card" data-index="2">
-    <div class="icon">🏠</div>
-    <h2>FAMILY.2</h2>
-    <p>A luh theih e</p>
-  </div>
-
-  <div class="card" data-index="3">
-    <div class="icon">🔐</div>
-    <span class="badge">🔒</span>
-    <h2>OTHERS</h2>
-    <p>Password angai</p>
-  </div>
-
-  <div class="card" data-index="4">
-    <div class="icon">📱</div>
-    <h2>SSA Phone ami</h2>
-    <p>A luh theih e</p>
-  </div>
-
-
-  <button class="nav-btn prev">&#10094;</button>
-  <button class="nav-btn next">&#10095;</button>
+  <div class="dots" id="dots"></div>
+  <p class="hint">Swipe or use arrow keys · Tap centered card to open</p>
 
 </div>
 
-<div class="dots" id="dots"></div>
-<p class="hint">Swipe or use arrow keys · Tap to open</p>
+<!-- ===== OTHERS PASSWORD MODAL ===== -->
+<div class="modal-overlay" id="othersModal">
+  <div class="modal-box">
+    <div class="icon">🔐</div>
+    <h3>Others — Locked</h3>
+    <input type="password" class="lock-input" id="othersInput" placeholder="• • • • • • • •" autocomplete="off" style="width: 100%;">
+    <button class="lock-btn" id="othersBtn">Unlock</button>
+    <div class="lock-error" id="othersError">Incorrect password</div>
+    <button class="modal-close" id="othersCancel">Cancel</button>
+  </div>
+</div>
 
 <script>
+  /* ================= SITE-WIDE LOCK ================= */
+  const SITE_PASSWORD = "////";
+  const lockScreen = document.getElementById('lockScreen');
+  const siteContent = document.getElementById('siteContent');
+  const siteLockInput = document.getElementById('siteLockInput');
+  const siteLockBtn = document.getElementById('siteLockBtn');
+  const siteLockError = document.getElementById('siteLockError');
+  const lockForm = document.querySelector('.lock-form');
+
+  function trySiteUnlock() {
+    if (siteLockInput.value === SITE_PASSWORD) {
+      lockScreen.classList.add('hidden');
+      siteContent.classList.add('revealed');
+      siteLockError.classList.remove('show');
+    } else {
+      siteLockError.classList.add('show');
+      lockForm.classList.remove('lock-shake');
+      void lockForm.offsetWidth; // restart animation
+      lockForm.classList.add('lock-shake');
+      siteLockInput.value = '';
+      siteLockInput.focus();
+    }
+  }
+
+  siteLockBtn.addEventListener('click', trySiteUnlock);
+  siteLockInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') trySiteUnlock();
+  });
+  // Autofocus the password field on load
+  window.addEventListener('load', () => siteLockInput.focus());
+
+  /* ================= CAROUSEL ================= */
   const cards = Array.from(document.querySelectorAll('.card'));
   const dotsEl = document.getElementById('dots');
   const total = cards.length;
@@ -219,6 +429,7 @@
   let startX = 0;
   let isDragging = false;
   let dragDelta = 0;
+  let dragMoved = false;
 
   cards.forEach((_, i) => {
     const d = document.createElement('div');
@@ -280,12 +491,14 @@
     isDragging = true;
     startX = clientX;
     dragDelta = 0;
+    dragMoved = false;
   }
 
   function onMove(clientX) {
     if (!isDragging) return;
 
     dragDelta = clientX - startX;
+    if (Math.abs(dragDelta) > 6) dragMoved = true;
 
     cards.forEach((card, i) => {
       card.style.transition = 'none';
@@ -330,6 +543,72 @@
 
   document.querySelector('.prev').addEventListener('click', () => goTo(current - 1));
   document.querySelector('.next').addEventListener('click', () => goTo(current + 1));
+
+  /* ================= CARD CLICK -> OPEN LINK ================= */
+  const OTHERS_PASSWORD = "Laceupkells1";
+  const othersModal = document.getElementById('othersModal');
+  const othersInput = document.getElementById('othersInput');
+  const othersBtn = document.getElementById('othersBtn');
+  const othersError = document.getElementById('othersError');
+  const othersCancel = document.getElementById('othersCancel');
+  const modalBox = document.querySelector('.modal-box');
+
+  let pendingLink = null;
+
+  function openOthersModal(link) {
+    pendingLink = link;
+    othersInput.value = '';
+    othersError.classList.remove('show');
+    othersModal.classList.add('show');
+    setTimeout(() => othersInput.focus(), 50);
+  }
+
+  function closeOthersModal() {
+    othersModal.classList.remove('show');
+    pendingLink = null;
+  }
+
+  function tryOthersUnlock() {
+    if (othersInput.value === OTHERS_PASSWORD) {
+      const link = pendingLink;
+      closeOthersModal();
+      if (link) window.open(link, '_blank', 'noopener,noreferrer');
+    } else {
+      othersError.classList.add('show');
+      modalBox.classList.remove('lock-shake');
+      void modalBox.offsetWidth;
+      modalBox.classList.add('lock-shake');
+      othersInput.value = '';
+      othersInput.focus();
+    }
+  }
+
+  othersBtn.addEventListener('click', tryOthersUnlock);
+  othersInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') tryOthersUnlock();
+  });
+  othersCancel.addEventListener('click', closeOthersModal);
+  othersModal.addEventListener('click', e => {
+    if (e.target === othersModal) closeOthersModal();
+  });
+
+  cards.forEach((card, i) => {
+    card.addEventListener('click', () => {
+      // Ignore the click if it was actually a drag/swipe
+      if (dragMoved) { dragMoved = false; return; }
+      // Only the centered (active) card is openable
+      if (i !== current) return;
+
+      const link = card.getAttribute('data-link');
+      if (!link) return;
+
+      if (card.getAttribute('data-locked') === 'true') {
+        openOthersModal(link);
+      } else {
+        window.open(link, '_blank', 'noopener,noreferrer');
+      }
+    });
+  });
 </script>
 </body>
 </html>
